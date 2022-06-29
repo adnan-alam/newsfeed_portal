@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # 3rd party
     "corsheaders",
     "rest_framework",
+    # custom
+    "newsfeed_portal.apps.account",
 ]
 
 MIDDLEWARE = [
