@@ -23,7 +23,7 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
 
         filter_dict = {}
         if source_list:
-            filter_dict["source__slug__in"] = source_list
+            filter_dict["source__name__in"] = source_list
 
         if country_list:
             filter_dict["source__country__in"] = country_list
@@ -31,17 +31,14 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
         if keyword_list:
             conditions = []
             for keyword in keyword_list:
-                queries = Q(**{"headline__icontains": keyword})
+                queries = [Q(**{"headline__icontains": keyword})]
                 conditions.append(reduce(python_operator.or_, queries))
 
             qs = self.queryset.filter(
-                reduce(python_operator.and_, conditions),
-                **filter_dict
+                reduce(python_operator.and_, conditions), **filter_dict
             ).order_by("-published_at")
         else:
-            qs = self.queryset.filter(
-                **filter_dict
-            ).order_by("-published_at")
+            qs = self.queryset.filter(**filter_dict).order_by("-published_at")
 
         return qs
 
@@ -51,9 +48,18 @@ class NewsSourceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers_news.NewsSourceSerializer
     queryset = models_news.NewsSource.objects.all().order_by("slug")
 
+    def paginate_queryset(self, queryset):
+        if (
+            self.paginator
+            and self.request.query_params.get(self.paginator.page_query_param, None)
+            is None
+        ):
+            return None
+        return super().paginate_queryset(queryset)
+
 
 class NewsSettingsViewSet(
-    viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.RetrieveModelMixin
+    viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.ListModelMixin
 ):
     permission_classes = [IsAuthenticated & permissions_core.NotAdminUser]
     serializer_class = serializers_news.NewsSettingsSerializer
@@ -62,3 +68,12 @@ class NewsSettingsViewSet(
     def get_queryset(self):
         qs = self.queryset.filter(user=self.request.user)
         return qs
+
+    def paginate_queryset(self, queryset):
+        if (
+            self.paginator
+            and self.request.query_params.get(self.paginator.page_query_param, None)
+            is None
+        ):
+            return None
+        return super().paginate_queryset(queryset)
