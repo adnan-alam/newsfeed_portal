@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class NewsSource(models.Model):
@@ -21,3 +22,12 @@ class News(models.Model):
 
     def __str__(self):
         return f"{self.headline}"
+
+
+class NewsSettings(models.Model):
+    country = ArrayField(models.CharField(max_length=2))
+    source = ArrayField(models.CharField(max_length=125))
+    keywords = ArrayField(models.CharField(max_length=50))
+
+    def __str__(self):
+        return f"{self.id}"
