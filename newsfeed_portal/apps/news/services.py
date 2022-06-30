@@ -1,9 +1,13 @@
-from asyncio.log import logger
+import pytz
+import logging
 from dateutil.parser import parse as dateutil_parse
 from newsapi import NewsApiClient
 from slugify import slugify
 from django.conf import settings
 from newsfeed_portal.apps.news import models as models_news
+
+
+logger = logging.getLogger(__name__)
 
 
 class NewsFetchService:
@@ -13,7 +17,7 @@ class NewsFetchService:
     def _save_news(self, article_list):
         for article in article_list:
             news_source_name = article["source"]["name"]
-            published_at = dateutil_parse(article["publishedAt"])
+            published_at = dateutil_parse(article["publishedAt"]).replace(tzinfo=pytz.UTC)
             headline_slug = slugify(article["title"], separator="-")
 
             try:
