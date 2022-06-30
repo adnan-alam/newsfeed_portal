@@ -5,3 +5,4 @@ DEFAULT_FROM_EMAIL=example@email.com
 DB_NAME=example_db
 DB_USER=username
 DB_PASSWORD=password
+NEWSAPI_API_KEY=NewsAPI api key
