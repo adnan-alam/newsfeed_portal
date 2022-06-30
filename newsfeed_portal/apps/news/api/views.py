@@ -12,7 +12,7 @@ from newsfeed_portal.apps.news.api import serializers as serializers_news
 class NewsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated & permissions_core.NotAdminUser]
     serializer_class = serializers_news.NewsSerializer
-    queryset = models_news.News.all().order_by("-published_at")
+    queryset = models_news.News.objects.all().order_by("-published_at")
     pagination_class = GlobalPagination
 
     def get_queryset(self):
@@ -20,6 +20,13 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
         source_list = user_newsettings.source
         country_list = user_newsettings.country
         keyword_list = user_newsettings.keywords
+
+        filter_dict = {}
+        if source_list:
+            filter_dict["source__slug__in"] = source_list
+
+        if country_list:
+            filter_dict["source__country__in"] = country_list
 
         if keyword_list:
             conditions = []
@@ -29,14 +36,12 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
 
             qs = self.queryset.filter(
                 reduce(python_operator.and_, conditions),
-                source__slug__in=source_list,
-                source__country__in=country_list,
-            )
+                **filter_dict
+            ).order_by("-published_at")
         else:
             qs = self.queryset.filter(
-                source__slug__in=source_list,
-                source__country__in=country_list,
-            )
+                **filter_dict
+            ).order_by("-published_at")
 
         return qs
 
@@ -44,7 +49,7 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
 class NewsSourceViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated & permissions_core.NotAdminUser]
     serializer_class = serializers_news.NewsSourceSerializer
-    queryset = models_news.NewsSource.all().order_by("slug")
+    queryset = models_news.NewsSource.objects.all().order_by("slug")
 
 
 class NewsSettingsViewSet(
@@ -52,7 +57,7 @@ class NewsSettingsViewSet(
 ):
     permission_classes = [IsAuthenticated & permissions_core.NotAdminUser]
     serializer_class = serializers_news.NewsSettingsSerializer
-    queryset = models_news.NewsSettings.all()
+    queryset = models_news.NewsSettings.objects.all()
 
     def get_queryset(self):
         qs = self.queryset.filter(user=self.request.user)
