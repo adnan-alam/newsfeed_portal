@@ -45,13 +45,13 @@ class News(models.Model):
 
 class NewsSettings(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    country = ArrayField(models.CharField(max_length=2))
-    source = ArrayField(models.CharField(max_length=125))
-    keywords = ArrayField(models.CharField(max_length=50))
+    country = ArrayField(models.CharField(max_length=2), null=True, blank=True)
+    source = ArrayField(models.CharField(max_length=125), null=True, blank=True)
+    keywords = ArrayField(models.CharField(max_length=50), null=True, blank=True)
 
     class Meta:
         verbose_name = _("News Settings")
         verbose_name_plural = _("News Settings")
 
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.user.username}"
