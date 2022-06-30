@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from newsfeed_portal.apps.core.api.serializers import DynamicFieldsModelSerializer
+from newsfeed_portal.apps.news import models as models_news
 
 
 User = get_user_model()
@@ -28,6 +29,8 @@ class UserSerializer(DynamicFieldsModelSerializer):
         user = User.objects.create_user(
             username=username, email=email, password=password
         )
+        # creating initial News Settings with empty values
+        models_news.NewsSettings.objects.create(user=user)
         return user
 
     def update(self, instance, validated_data):
