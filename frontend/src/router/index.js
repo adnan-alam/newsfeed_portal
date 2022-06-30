@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
 import HomePage from "../pages/HomePage.vue";
+import SettingsPage from "../pages/SettingsPage.vue";
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,12 @@ const routes = [
     name: "RegisterPage",
     component: RegisterPage,
     meta: { title: "Register | Newsfeed Portal" }
+  },
+  {
+    path: "/settings",
+    name: "SettingsPage",
+    component: SettingsPage,
+    meta: { title: "Settings | Newsfeed Portal" }
   }
 ];
 

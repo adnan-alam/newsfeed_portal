@@ -1,5 +1,11 @@
 <template>
   <div id="nav">
+    <router-link to="/">
+      News
+    </router-link>
+    <router-link v-if="loggedIn" to="/settings">
+      Settings
+    </router-link>
     <b-button v-if="loggedIn" variant="white" @click="logout">
       Logout
     </b-button>

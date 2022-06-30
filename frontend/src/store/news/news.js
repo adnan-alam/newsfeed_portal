@@ -29,5 +29,64 @@ export const actions = {
         console.log(err);
         return err.response;
       });
+  },
+
+  getNewsSourceListWithoutPagination({}) {
+    return ServiceNews.getNewsSourceListWithoutPagination()
+      .then(response => {
+        return response;
+      })
+      .catch(err => {
+        console.log(err);
+        return err.response;
+      });
+  },
+
+  getUserNewsSettings({}) {
+    return ServiceNews.getUserNewsSettings()
+      .then(response => {
+        return response;
+      })
+      .catch(err => {
+        console.log(err);
+        return err.response;
+      });
+  },
+
+  updateNewsSettings({}, { settingsId, data }) {
+    return ServiceNews.updateNewsSettings(settingsId, data)
+      .then(response => {
+        Vue.toasted.show("Settings updated successfully", {
+          className: "bg-success"
+        });
+        return response;
+      })
+      .catch(err => {
+        if (err.response.status == 400) {
+          let message = "";
+
+          if (err.response.data.message) {
+            message = err.response.data.message;
+          } else if (err.response.data.country) {
+            message = "Country of news: " + err.response.data.country;
+          } else if (err.response.data.source) {
+            message = "Source of news: " + err.response.data.source;
+          } else if (err.response.data.keywords) {
+            message = "Keywords: " + err.response.data.keywords;
+          }
+
+          if (message) {
+            Vue.toasted.show(message, {
+              className: "bg-danger"
+            });
+          }
+        } else {
+          Vue.toasted.show("Oops! Something went wrong", {
+            className: "bg-danger"
+          });
+        }
+
+        return err.response;
+      });
   }
 };
