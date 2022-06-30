@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from newsfeed_portal.apps.account.api import serializers as serializers_account
-from newsfeed_portal.apps.account.api import permissions as permissions_account
+from newsfeed_portal.apps.core.api import permissions as permissions_account
 
 
 User = get_user_model()
