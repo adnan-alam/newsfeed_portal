@@ -70,7 +70,6 @@ class NewsFetchService:
 
         if sources["status"] == "ok":
             source_list = sources["sources"]
-            print(source_list)
             self._save_news_sources(source_list)
         else:
             raise Exception(f"Response: {sources['status']}")
