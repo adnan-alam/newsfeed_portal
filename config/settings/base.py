@@ -15,6 +15,7 @@ import datetime
 import environ
 import os
 from pathlib import Path
+from redis import ConnectionPool
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # 3rd party
     "corsheaders",
+    "huey.contrib.djhuey",
     "rest_framework",
     "rest_framework_simplejwt",
     # custom
@@ -273,4 +275,15 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
     "SLIDING_TOKEN_LIFETIME": datetime.timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": datetime.timedelta(days=1),
+}
+
+
+# django-huey task scheduler settings
+pool = ConnectionPool(host="127.0.0.1", port=6379, max_connections=20)
+
+HUEY = {
+    "name": "newsfeed_portal",
+    "immediate": False,
+    "connection": {"connection_pool": pool},
+    "consumer": {"workers": 1, "worker_type": "thread"},
 }
