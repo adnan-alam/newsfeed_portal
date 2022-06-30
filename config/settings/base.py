@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     # custom
     "newsfeed_portal.apps.account",
+    "newsfeed_portal.apps.core",
+    "newsfeed_portal.apps.news",
 ]
 
 MIDDLEWARE = [
@@ -231,6 +233,10 @@ LOGGING = {
 
 # SendGrid API Key
 SENDGRID_API_KEY = env.str("SENDGRID_API_KEY")
+
+
+# NewsAPI API Key
+NEWSAPI_API_KEY = env.str("NEWSAPI_API_KEY")
 
 
 # EMAIL Settings
