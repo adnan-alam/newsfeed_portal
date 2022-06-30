@@ -9,7 +9,7 @@ class NewsSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = models_news.News
-        fields = ["id", "headline", "thumbnail", "news_source", "country", "news_url"]
+        fields = ["id", "headline", "thumbnail_url", "news_source", "country", "news_url", "published_at"]
         read_only_fields = fields
 
 
@@ -25,4 +25,10 @@ class NewsSettingsSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = models_news.NewsSettings
-        fields = ["id", "country", "source", "keywords"]
+        fields = ["id", "user", "country", "source", "keywords"]
+        read_only_fields = ["id", "user"]
+
+    def update(self, instance, validated_data):
+        models_news.NewsSettings.objects.filter(id=instance.id).update(**validated_data)
+        instance.refresh_from_db()
+        return instance
