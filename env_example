@@ -1,5 +1,4 @@
 DJANGO_SECRET_KEY=a secret key
-SQLITE_DATABASE_NAME=example_db.sqlite3
 SENDGRID_API_KEY=sendgrid api key
 DEFAULT_FROM_EMAIL=example@email.com
 DB_NAME=example_db
