@@ -11,15 +11,18 @@
         <form-login></form-login>
       </b-col>
     </b-row>
+
+    <news-list v-else></news-list>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import FormLogin from "../components/account/FormLogin.vue";
+import NewsList from "../components/news/NewsList.vue";
 
 export default {
-  components: { FormLogin },
+  components: { FormLogin, NewsList },
 
   computed: {
     ...mapGetters("account", ["loggedIn"])

@@ -3,7 +3,7 @@ import apiClient from "../ApiClient";
 const urlList = {
   urlAccount: "/api/v1/",
   urlToken: "/api/v1/token/",
-  urlTokenRefresh: "/api/v1/token/refresh/",
+  urlTokenRefresh: "/api/v1/token/refresh/"
 };
 
 export default {
@@ -19,6 +19,7 @@ export default {
   refreshToken() {
     let url = urlList.urlTokenRefresh;
     const tokenData = JSON.parse(localStorage.getItem("tokenData"));
-    return apiClient.post(url, tokenData.refresh);
-  },
+    console.log({ refresh: tokenData.refresh });
+    return apiClient.post(url, { refresh: tokenData.refresh });
+  }
 };

@@ -25,14 +25,13 @@ Vue.use(Toasted, {
   position: "bottom-right",
   fitToScreen: true,
   theme: "toasted-primary",
-  duration: 3000,
+  duration: 3000
 });
-
 
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  render: h => h(App),
   created() {
     const tokenDataString = localStorage.getItem("tokenData");
     if (tokenDataString) {
@@ -41,16 +40,19 @@ new Vue({
     }
 
     apiClient.interceptors.response.use(
-      (response) => response,
-      (error) => {
+      response => response,
+      error => {
         console.log(error.response);
         if (error.response.status === 401) {
-          this.$store.dispatch("account/refreshToken");
-          // this.$router.push("/");
-          // this.$store.commit("LOGOUT");
+          this.$store.dispatch("account/refreshToken").then(resp => {
+            if (resp.status != 200) {
+              this.$router.push("/").catch(() => {});
+              this.$store.commit("account/LOGOUT");
+            }
+          });
         }
         return Promise.reject(error);
       }
     );
-  },
+  }
 }).$mount("#app");

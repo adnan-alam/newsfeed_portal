@@ -43,7 +43,7 @@ export default {
     onSubmit() {
       this.$store.dispatch("account/loginUser", this.form).then(response => {
         if (response.status == 200) {
-          this.$router.push({ name: "HomePage" });
+          this.$router.push({ name: "HomePage" }).catch(() => {});
         }
       });
     }
